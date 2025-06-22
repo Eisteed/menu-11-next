@@ -7,15 +7,15 @@
                 "Name": "Eisteed"
             }
         ],
-        "BugReportUrl": "https://bugs.kde.org/enter_bug.cgi?product=plasmashell&component=Application%20Menu%20(Kicker)",
+        "BugReportUrl": "https://github.com/Eisteed/menu-11-next/issues",
         "Category": "Application Launchers",
         "Description": "Configurable grid of application icons",
         "EnabledByDefault": true,
         "Icon": "start-here-kde",
-        "Id": "eisteed.menu.11",
+        "Id": "menu.11.next",
         "License": "GPL-2.0+",
-        "Name": "Menu 11 (Eisteed)",
-        "Website": "https://kde.org/plasma-desktop"
+        "Name": "Menu 11 Next",
+        "Website": "https://github.com/Eisteed/menu-11-next"
     },
     "X-Plasma-API-Minimum-Version": "6.0",
     "X-Plasma-Provides": [
