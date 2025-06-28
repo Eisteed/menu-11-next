@@ -71,7 +71,7 @@ RowLayout{
         MouseArea {
                 cursorShape: Qt.PointingHandCursor
                 anchors.fill: parent
-                onClicked: logic.openUrl("file:///home/" + qsTr(kuser.fullName))
+                onClicked: logic.openUrl("file:///home/" + qsTr(kuser.loginName))
         }
         icon.width: 24
         icon.height: 24
