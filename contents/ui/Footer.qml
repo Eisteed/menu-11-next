@@ -1,31 +1,31 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.15
 import QtQuick.Controls 2.15
+import QtCore
 
-import org.kde.plasma.plasmoid 2.0
+import org.kde.plasma.plasmoid
 import org.kde.plasma.core as PlasmaCore
 import org.kde.plasma.extras as PlasmaExtras
 
 import org.kde.plasma.private.kicker 0.1 as Kicker
-import org.kde.coreaddons 1.0 as KCoreAddons // kuser
-import org.kde.plasma.private.shell 2.0
+import org.kde.coreaddons 1.0 as KCoreAddons
+import org.kde.plasma.private.shell
 
 import org.kde.kwindowsystem
-//import QtGraphicalEffects 1.0
-import org.kde.kquickcontrolsaddons 2.0
+import org.kde.kquickcontrolsaddons
 
 import org.kde.plasma.components as PlasmaComponents3
-import org.kde.plasma.private.quicklaunch 1.0
+
 
 import org.kde.kirigami as Kirigami
-import org.kde.plasma.private.sessions 2.0
+import org.kde.plasma.private.sessions
 
 RowLayout{
 
     spacing: Kirigami.Units.largeSpacing
 
     KCoreAddons.KUser {   id: kuser  }
-    Logic {   id: logic }
+    //Logic {   id: logic }
 
     SessionManagement {
         id: sessionManager
@@ -35,7 +35,7 @@ RowLayout{
         MouseArea {
                 cursorShape: Qt.PointingHandCursor
                 anchors.fill: parent
-                onClicked: logic.openUrl("file:///usr/share/applications/kcm_users.desktop")
+                onClicked: Qt.openUrlExternally("file:///usr/share/applications/kcm_users.desktop")
         }
         Image {
             id: iconUser
@@ -71,7 +71,7 @@ RowLayout{
         MouseArea {
                 cursorShape: Qt.PointingHandCursor
                 anchors.fill: parent
-                onClicked: logic.openUrl("file:///home/" + qsTr(kuser.fullName))
+                onClicked: Qt.openUrlExternally("file:///home/" + qsTr(kuser.fullName))
         }
         icon.width: 24
         icon.height: 24
@@ -88,7 +88,7 @@ RowLayout{
         MouseArea {
                 cursorShape: Qt.PointingHandCursor
                 anchors.fill: parent 
-                onClicked: logic.openUrl("file:///usr/share/applications/systemsettings.desktop")
+                onClicked: Qt.openUrlExternally("file:///usr/share/applications/systemsettings.desktop")
                 }
         icon.width: 24
         icon.height: 24
@@ -170,4 +170,6 @@ RowLayout{
         PlasmaComponents3.ToolTip.visible: hovered
         PlasmaComponents3.ToolTip.text: i18n("Shutdown")
     }
+
+    
 }

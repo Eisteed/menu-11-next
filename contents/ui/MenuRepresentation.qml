@@ -27,13 +27,13 @@ import org.kde.plasma.components as PC3
 import org.kde.plasma.extras as PlasmaExtras
 import org.kde.plasma.private.kicker 0.1 as Kicker
 import org.kde.kquickcontrolsaddons 2.0
-import org.kde.plasma.private.quicklaunch 1.0
+
 import org.kde.kirigami as Kirigami
 import org.kde.plasma.plasma5support as Plasma5Support
 
 PlasmaCore.Dialog {
     id: root
-    backgroundHints: PlasmaCore.Types.NoBackground
+
     objectName: "popupWindow"
     flags: Qt.WindowStaysOnTopHint
     location: {
@@ -189,15 +189,8 @@ PlasmaCore.Dialog {
 
     mainItem: FocusScope {
         id: rootItem
-        Rectangle {
-            id: dialogBackground
-            anchors.fill: parent
-            color: Kirigami.Theme.backgroundColor
-            radius: 15
-            border.width: 1
-            border.color: colorWithAlpha(Kirigami.Theme.textColor, 0.1)
-            z: -1  // This puts it behind all other elements
-        }
+
+
         property int widthComputed: root.cellSizeWidth * Plasmoid.configuration.numberColumns + Kirigami.Units.gridUnit * 2
 
         width: Math.max(widthComputed + Kirigami.Units.gridUnit * 2, 300)

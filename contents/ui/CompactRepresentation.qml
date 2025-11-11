@@ -24,6 +24,7 @@ import org.kde.plasma.plasmoid
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.kirigami as Kirigami
 
+
 Item {
     id: root
 
