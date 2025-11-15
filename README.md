@@ -1,6 +1,6 @@
 # Menu 11 Next
 
-## Windows 11 menu launcher for KDE Plasma 6
+## Windows 11 menu launcher for KDE Plasma 6.5
 Based on [menu 11 plasma6,](https://github.com/adhec/OnzeMenuKDE), with some tweaks & modifications to make it fully working with the most recent kde plasma.
 Small design tweaks (moure rounded search bar, no blue underline, light gray background hover app select / buttons)
 
