@@ -25,7 +25,7 @@ Small design tweaks (moure rounded search bar, no blue underline, light gray bac
 - KDE Plasma 6+
 - `kpackagetool6` (included with KDE)
 
-### Method 2: Manual Install from Source
+### Method : Manual Install from Source
 
 ```bash
 # Clone the repository
