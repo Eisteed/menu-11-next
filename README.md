@@ -1,6 +1,6 @@
 # Menu 11 Next
 
-## Windows 11 menu launcher for KDE Plasma 6.5
+## Windows 11 menu launcher for KDE Plasma 6
 Based on [menu 11 plasma6,](https://github.com/adhec/OnzeMenuKDE), with some tweaks & modifications to make it fully working with the most recent kde plasma.
 Small design tweaks (moure rounded search bar, no blue underline, light gray background hover app select / buttons)
 
@@ -22,8 +22,8 @@ Small design tweaks (moure rounded search bar, no blue underline, light gray bac
 ## Installation
 
 ### Requirements
-- KDE Plasma 6.5+
-- `cmake`, `extra-cmake-modules`, `kpackagetool6`
+- KDE Plasma 6+
+- `kpackagetool6` (included with KDE)
 
 ### Method 1: Install via KDE Store (Recommended)
 Search for **Menu 11 Next** in *System Settings → Get New Widgets*.
