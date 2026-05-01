@@ -25,9 +25,6 @@ Small design tweaks (moure rounded search bar, no blue underline, light gray bac
 - KDE Plasma 6+
 - `kpackagetool6` (included with KDE)
 
-### Method 1: Install via KDE Store (Recommended)
-Search for **Menu 11 Next** in *System Settings → Get New Widgets*.
-
 ### Method 2: Manual Install from Source
 
 ```bash
