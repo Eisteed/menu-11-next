@@ -57,9 +57,9 @@ kpackagetool6 --type Plasma/Applet --remove menu.11.next
 ---
 
 ## Screenshot
-![Screenshot 1](<img width="613" height="730" alt="Screenshot_20260501_224736" src="https://github.com/user-attachments/assets/d23167b0-cc04-4cad-bf1d-3a11bca9a0c7" />)
+![Screenshot 1] <img width="613" height="730" alt="Screenshot_20260501_224736" src="https://github.com/user-attachments/assets/d23167b0-cc04-4cad-bf1d-3a11bca9a0c7" />
 
-![Screenshot 2](<img width="611" height="728" alt="Screenshot_20260501_224717" src="https://github.com/user-attachments/assets/e92a5883-11f1-4dd7-977b-2217dcef973d" />)
+![Screenshot 2] <img width="611" height="728" alt="Screenshot_20260501_224717" src="https://github.com/user-attachments/assets/e92a5883-11f1-4dd7-977b-2217dcef973d" />
 
-![Screenshot 2](<img width="605" height="721" alt="Screenshot_20260501_224749" src="https://github.com/user-attachments/assets/f9ea63b1-664e-48f5-ad38-9d201548a1e3" />)
+![Screenshot 2] <img width="605" height="721" alt="Screenshot_20260501_224749" src="https://github.com/user-attachments/assets/f9ea63b1-664e-48f5-ad38-9d201548a1e3" />
 
