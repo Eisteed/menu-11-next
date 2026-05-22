@@ -32,7 +32,8 @@ import org.kde.kirigami as Kirigami
 import org.kde.plasma.plasma5support as Plasma5Support
 import org.kde.kitemmodels 1.0 as KItemModels
 import org.kde.coreaddons 1.0 as KCoreAddons
-import "code/plugins.js" as PluginSystem
+import "." as CustomUI
+import "code/UpdateChecker.js" as UpdateChecker
 
 PlasmaCore.Dialog {
     id: root
@@ -108,6 +109,21 @@ PlasmaCore.Dialog {
             if (Plasmoid.configuration.allAppsViewMode === 2) {
                 ensureCategoryModel();
             }
+            if (weatherCard) {
+                weatherCard.updateWeather();
+            }
+            // Trigger periodic background update check (throttled to once per 24 hours)
+            if (UpdateChecker.shouldCheckForUpdates(Plasmoid.configuration)) {
+                UpdateChecker.checkForUpdates("1.3", function(result) {
+                    if (result.success) {
+                        UpdateChecker.recordLastCheckTime(Plasmoid.configuration);
+                        if (result.updateAvailable) {
+                            console.log("Update available: " + result.latestVersion);
+                            // Could trigger a subtle notification here
+                        }
+                    }
+                });
+            }
         } else {
             view.currentIndex = 0;
         }
@@ -135,7 +151,6 @@ PlasmaCore.Dialog {
 
     function reset() {
         searchDebounce.stop();
-        rootItem.pluginResults = [];
         searchField.text = "";
         searchField.focus = true;
         view.currentIndex = 0;
@@ -561,44 +576,7 @@ PlasmaCore.Dialog {
             { name: "files",      icon: "system-file-manager", desc: i18n("Open file manager"),      cmd: "dolphin" },
             { name: "terminal",   icon: "utilities-terminal",  desc: i18n("Open a terminal"),        cmd: "konsole" },
             { name: "logout",     icon: "system-log-out",      desc: i18n("Log out"),                cmd: "loginctl terminate-user " + Qt.application.name }
-        ].concat(PluginSystem.extraCommands()))
-
-        Component.onCompleted: {
-            // Calculator — handled inline in QML, stub so it appears in registeredPlugins()
-            PluginSystem.register({
-                name: "Calculator",
-                icon: "accessories-calculator",
-                commands: [],
-                handleQuery: function(q) { return null; },
-                searchResults: function(q) { return []; }
-            });
-
-            // Web Search — injects "Search the web for X" into search results
-            PluginSystem.register({
-                name: "Web Search",
-                icon: "internet-web-browser",
-                commands: [],
-                handleQuery: function(q) { return null; },
-                searchResults: function(q) {
-                    if (!q || q.length < 2) return [];
-                    return [{
-                        icon: "internet-web-browser",
-                        title: i18n("Search the web for \"%1\"", q),
-                        subtitle: i18n("Opens default browser"),
-                        action: "xdg-open 'https://duckduckgo.com/?q=" + encodeURIComponent(q) + "'"
-                    }];
-                }
-            });
-        }
-
-        // Aggregated plugin search results — updated whenever the runner query changes
-        property var pluginResults: []
-
-        function refreshPluginResults(query) {
-            pluginResults = (query && query.length >= 2)
-                            ? PluginSystem.searchResults(query)
-                            : [];
-        }
+        ])
 
         Plasma5Support.DataSource {
             id: executable
@@ -1274,6 +1252,12 @@ PlasmaCore.Dialog {
                     }
                 }
 
+                // ── Weather Card ────────────────────────────────────────────────
+                CustomUI.WeatherCard {
+                    id: weatherCard
+                    width: parent.width
+                }
+
                 // Fixed-height container so the menu never resizes when docs/recent-apps are toggled
                 Item {
                     id: docsContainer
@@ -1454,50 +1438,6 @@ PlasmaCore.Dialog {
                                 event.accepted = true;
                                 documentsGrid.focus = false;
                                 footerContent.forceActiveFocus();
-                            }
-                        }
-                    }
-                }
-                // ── Plugin UI Sections ──────────────────────────────────────
-                Column {
-                    id: pluginSectionsColumn
-                    width: parent.width
-                    spacing: Kirigami.Units.largeSpacing
-                    visible: pluginSectionsRepeater.count > 0
-
-                    Repeater {
-                        id: pluginSectionsRepeater
-                        model: PluginSystem.uiSections()
-
-                        delegate: Item {
-                            width: pluginSectionsColumn.width
-                            height: sectionLoader.implicitHeight + Kirigami.Units.largeSpacing
-
-                            // Section header
-                            Row {
-                                id: sectionHeader
-                                spacing: Kirigami.Units.smallSpacing
-
-                                Kirigami.Icon {
-                                    source: "plugins"
-                                    implicitWidth: Kirigami.Units.iconSizes.smallMedium
-                                    implicitHeight: Kirigami.Units.iconSizes.smallMedium
-                                    anchors.verticalCenter: parent.verticalCenter
-                                }
-                                PlasmaExtras.Heading {
-                                    level: 5
-                                    text: modelData.name
-                                    color: root.colorWithAlpha(Kirigami.Theme.textColor, 0.8)
-                                    font.weight: Font.Bold
-                                }
-                            }
-
-                            Loader {
-                                id: sectionLoader
-                                anchors.top: sectionHeader.bottom
-                                anchors.topMargin: Kirigami.Units.smallSpacing
-                                width: parent.width
-                                sourceComponent: modelData.component
                             }
                         }
                     }
@@ -2074,104 +2014,6 @@ PlasmaCore.Dialog {
                     font.pointSize: Kirigami.Theme.defaultFont.pointSize * 0.72
                 }
 
-                // ── Plugin search results (anchored at BOTTOM, not top) ──
-                Column {
-                    id: pluginResultsColumn
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: Kirigami.Units.smallSpacing
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    spacing: 2
-                    z: 10
-                    visible: root.searching
-                             && !searchField.text.startsWith('/')
-                             && !searchField.text.startsWith('>')
-                             && rootItem.pluginResults.length > 0
-
-                    Repeater {
-                        model: rootItem.pluginResults
-
-                        delegate: Item {
-                            id: pluginResultItem
-                            width: pluginResultsColumn.width
-                            height: Kirigami.Units.gridUnit * 3
-
-                            Rectangle {
-                                anchors.fill: parent
-                                anchors.margins: 2
-                                radius: Kirigami.Units.smallSpacing
-                                color: pluginResultHover.containsMouse
-                                       ? root.colorWithAlpha(Kirigami.Theme.highlightColor, 0.10)
-                                       : "transparent"
-                                border.width: 1
-                                border.color: root.colorWithAlpha(Kirigami.Theme.textColor, 0.07)
-                                Behavior on color { ColorAnimation { duration: 80 } }
-                            }
-
-                            Row {
-                                anchors.left: parent.left
-                                anchors.leftMargin: Kirigami.Units.smallSpacing * 2
-                                anchors.verticalCenter: parent.verticalCenter
-                                spacing: Kirigami.Units.smallSpacing
-
-                                Kirigami.Icon {
-                                    source: modelData.icon || "edit-find"
-                                    width: Kirigami.Units.iconSizes.smallMedium
-                                    height: width
-                                    anchors.verticalCenter: parent.verticalCenter
-                                    animated: false
-                                }
-
-                                Column {
-                                    anchors.verticalCenter: parent.verticalCenter
-                                    spacing: 1
-
-                                    Text {
-                                        text: modelData.title || ""
-                                        color: Kirigami.Theme.textColor
-                                        font.pointSize: Kirigami.Theme.defaultFont.pointSize * 0.95
-                                        elide: Text.ElideRight
-                                        width: pluginResultsColumn.width
-                                               - Kirigami.Units.iconSizes.smallMedium
-                                               - Kirigami.Units.smallSpacing * 4
-                                    }
-
-                                    Text {
-                                        visible: modelData.subtitle !== undefined && modelData.subtitle !== ""
-                                        text: modelData.subtitle || ""
-                                        color: root.colorWithAlpha(Kirigami.Theme.textColor, 0.55)
-                                        font.pointSize: Kirigami.Theme.defaultFont.pointSize * 0.78
-                                        elide: Text.ElideRight
-                                        width: pluginResultsColumn.width
-                                               - Kirigami.Units.iconSizes.smallMedium
-                                               - Kirigami.Units.smallSpacing * 4
-                                    }
-                                }
-                            }
-
-                            MouseArea {
-                                id: pluginResultHover
-                                anchors.fill: parent
-                                hoverEnabled: true
-                                cursorShape: Qt.PointingHandCursor
-                                onClicked: {
-                                    var act = modelData.action;
-                                    if (typeof act === "function") act();
-                                    else if (typeof act === "string") executable.exec(act);
-                                    root.toggle();
-                                }
-                            }
-
-                            Keys.onReturnPressed: {
-                                var act = modelData.action;
-                                if (typeof act === "function") act();
-                                else if (typeof act === "string") executable.exec(act);
-                                root.toggle();
-                            }
-                        }
-                    }
-                }
-
                 // ── Results grid ──
                 ItemMultiGridView {
                     id: runnerGrid
@@ -2179,9 +2021,7 @@ PlasmaCore.Dialog {
                     anchors.topMargin: Kirigami.Units.smallSpacing
                     anchors.left: parent.left
                     anchors.right: parent.right
-                    // Constrain bottom to leave room for plugin results when visible
-                    anchors.bottom: pluginResultsColumn.visible ? pluginResultsColumn.top : parent.bottom
-                    anchors.bottomMargin: pluginResultsColumn.visible ? Kirigami.Units.smallSpacing : 0
+                    anchors.bottom: parent.bottom
                     visible: !(root.searching && searchField.text.startsWith('/'))
                     clip: true
                     itemColumns: 3
@@ -2271,7 +2111,6 @@ PlasmaCore.Dialog {
             repeat: false
             onTriggered: {
                 runnerModel.query = searchField.text;
-                rootItem.refreshPluginResults(searchField.text);
             }
         }
 

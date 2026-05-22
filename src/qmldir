@@ -1,0 +1,3 @@
+module Menu11Next.Weather
+plugin weatherbridge
+classname WeatherBridgePlugin

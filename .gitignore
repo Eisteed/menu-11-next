@@ -1,10 +1,12 @@
-
-What-was-done.md
-What-must-be-done.md
-TODO.md
-what i added/
-.cursorrules
-AGENTS.md
-files.txt
-CLAUDE.md
-history.txt
+build/
+node_modules/
+*.cmake
+cmake_install.cmake
+CMakeCache.txt
+Makefile
+.Qt/
+*.o
+*.so
+*.a
+.npmrc
+ChatGPT*

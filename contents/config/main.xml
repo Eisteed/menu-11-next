@@ -130,6 +130,31 @@
       <default>false</default>
     </entry>
 
+    <entry name="showWeather" type="Bool">
+      <default>false</default>
+      <label>Show weather widget on home page</label>
+    </entry>
+
+    <entry name="weatherLocation" type="Int">
+      <default>0</default>
+      <label>Weather location preset</label>
+    </entry>
+
+    <entry name="weatherLatitude" type="Double">
+      <default>48.8566</default>
+      <label>Weather location latitude</label>
+    </entry>
+
+    <entry name="weatherLongitude" type="Double">
+      <default>2.3522</default>
+      <label>Weather location longitude</label>
+    </entry>
+
+    <entry name="lastUpdateCheckTime" type="Int">
+      <default>0</default>
+      <label>Timestamp of last update check</label>
+    </entry>
+
     <entry name="appLaunchCounts" type="String">
       <default></default>
     </entry>
