@@ -1,140 +1,636 @@
-# Translation of dittomenu in LANGUAGE
-# Copyright (C) 2023
-# This file is distributed under the same license as the dittomenu package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: dittomenu\n"
-"Report-Msgid-Bugs-To: https://store.kde.org/p/1312669/\n"
-"POT-Creation-Date: 2023-05-01 16:59-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Project-Id-Version: menu-11-next\n"
+"Report-Msgid-Bugs-To: https://github.com/Eisteed/menu-11-next/issues\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../metadata.desktop
-msgid "Ditto Menu"
-msgstr ""
+#: ../contents/ui/MenuRepresentation.qml
+msgid "%1 afternoon picks"
+msgstr "%1-Nachmittagsauswahl"
 
-#: ../metadata.desktop
-msgid "A configurable launcher menu"
-msgstr "Startmenü Einstellungen"
+#: ../contents/ui/MenuRepresentation.qml
+msgid "%1 app"
+msgid_plural "%1 apps"
+msgstr[0] "%1 App"
+msgstr[1] "%1 Apps"
 
-#: ../contents/code/tools.js
-msgid "Remove from Favorites"
-msgstr "Von Favoriten entfernt"
+#: ../contents/ui/MenuRepresentation.qml
+msgid "%1 evening picks"
+msgstr "%1-Abendauswahl"
 
-#: ../contents/code/tools.js
-msgid "Add to Favorites"
-msgstr "In Favoriten hinzufügen"
+#: ../contents/ui/MenuRepresentation.qml
+msgid "%1 morning picks"
+msgstr "%1-Morgenauswahl"
 
-#: ../contents/code/tools.js
-msgid "On All Activities"
-msgstr "Aktivitäten"
-
-#: ../contents/code/tools.js
-msgid "On The Current Activity"
-msgstr "Aktuelle Aktivität"
-
-#: ../contents/code/tools.js
-msgid "Show In Favorites"
-msgstr "In Favoriten anzeigen"
-
-#: ../contents/config/config.qml
-msgid "General"
-msgstr "Allgemein"
+#: ../contents/ui/MenuRepresentation.qml
+msgid "%1 night session"
+msgstr "%1-Nachtsitzung"
 
 #: ../contents/ui/ConfigGeneral.qml
-msgid "Icon:"
-msgstr "Symbol:"
+msgid "A → Z"
+msgstr "A → Z"
+
+#: ../contents/ui/ConfigGeneral.qml
+msgid "About"
+msgstr "Über"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "Actions"
+msgstr "Aktionen"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "Add apps to folder"
+msgstr "Apps zum Ordner hinzufügen"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "Add apps — %1"
+msgstr "Apps hinzufügen – %1"
+
+#: ../contents/ui/code/tools.js
+msgid "Add to Favorites"
+msgstr "Zu Favoriten hinzufügen"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "Afternoon session"
+msgstr "Nachmittags"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "All"
+msgstr "Alle"
+
+#: ../contents/ui/ConfigGeneral.qml
+msgid "All Apps"
+msgstr "Alle Apps"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "All apps"
+msgstr "Alle Apps"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "Alt+1–9 to launch"
+msgstr "Alt+1–9 zum Starten"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "Apps"
+msgstr "Apps"
+
+#: ../contents/ui/ConfigGeneral.qml
+msgid "Apps icon size:"
+msgstr "Symbolgröße Apps:"
+
+#: ../contents/ui/ConfigGeneral.qml
+msgid "Bangkok"
+msgstr "Bangkok"
+
+#: ../contents/ui/ConfigGeneral.qml
+msgid "Berlin"
+msgstr "Berlin"
+
+#: ../contents/ui/ConfigGeneral.qml
+msgid "By type"
+msgstr "Nach Typ"
+
+#: ../contents/ui/ConfigGeneral.qml
+msgid "Cairo"
+msgstr "Kairo"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "Calculator"
+msgstr "Rechner"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: ../contents/ui/ConfigGeneral.qml
+msgid "Category"
+msgstr "Kategorie"
+
+#: ../contents/ui/ConfigGeneral.qml
+msgid "Center"
+msgstr "Mittig"
+
+#: ../contents/ui/ConfigGeneral.qml
+msgid "Center bottom"
+msgstr "Unten mittig"
+
+#: ../contents/ui/ConfigGeneral.qml
+msgid "Check for Updates"
+msgstr "Nach Aktualisierungen suchen"
+
+#: ../contents/ui/ConfigGeneral.qml
+msgid "Checking..."
+msgstr "Wird geprüft …"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "Choose apps from Pinned:"
+msgstr "Apps aus „Angeheftet“ wählen:"
 
 #: ../contents/ui/ConfigGeneral.qml
 msgctxt "@item:inmenu Open icon chooser dialog"
-msgid "Choose..."
-msgstr "Wählen..."
+msgid "Choose…"
+msgstr "Auswählen …"
 
 #: ../contents/ui/ConfigGeneral.qml
 msgctxt "@item:inmenu Reset icon to default"
 msgid "Clear Icon"
-msgstr "Symbol löschen"
+msgstr "Symbol zurücksetzen"
 
 #: ../contents/ui/ConfigGeneral.qml
-msgid "Show favorites first"
-msgstr "Favoriten zuerst anzeigen"
+msgid "Click OK to open release page"
+msgstr "Auf OK klicken, um die Release-Seite zu öffnen"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "Create"
+msgstr "Erstellen"
 
 #: ../contents/ui/ConfigGeneral.qml
-msgid "Menu position"
-msgstr "Menü Position"
+msgid "Custom"
+msgstr "Benutzerdefiniert"
+
+#: ../contents/ui/ConfigGeneral.qml
+msgid "Custom latitude:"
+msgstr "Eigener Breitengrad:"
+
+#: ../contents/ui/ConfigGeneral.qml
+msgid "Custom longitude:"
+msgstr "Eigener Längengrad:"
 
 #: ../contents/ui/ConfigGeneral.qml
 msgid "Default"
 msgstr "Standard"
 
 #: ../contents/ui/ConfigGeneral.qml
-msgid "Center"
-msgstr "mittig"
+msgid "Default sort order:"
+msgstr "Standard-Sortierung:"
 
 #: ../contents/ui/ConfigGeneral.qml
-msgid "Center bottom"
-msgstr "unten"
+msgid "Default view mode:"
+msgstr "Standard-Ansicht:"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "Delete folder"
+msgstr "Ordner löschen"
 
 #: ../contents/ui/ConfigGeneral.qml
-msgid "Show labels in two lines"
-msgstr "Beschriftungen in zwei Zeilen anzeigen"
+msgid "Docs icon size:"
+msgstr "Symbolgröße Dokumente:"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "Drag apps from the list onto this folder to add them."
+msgstr "Apps aus der Liste auf diesen Ordner ziehen, um sie hinzuzufügen."
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "Drag apps here to add them"
+msgstr "Apps hierher ziehen, um sie hinzuzufügen"
+
+#: ../contents/ui/ConfigGeneral.qml
+msgid "Dubai"
+msgstr "Dubai"
+
+#: ../contents/ui/main.qml
+msgid "Edit Applications…"
+msgstr "Anwendungen bearbeiten …"
+
+#: ../contents/ui/ConfigGeneral.qml
+msgid "Enable shell command runner ( > cmd )"
+msgstr "Shell-Befehle ausführen aktivieren ( > Befehl )"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "Enter or click to copy result"
+msgstr "Enter oder Klick kopiert das Ergebnis"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "Evening apps"
+msgstr "Abend-Apps"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "Files"
+msgstr "Dateien"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "Filter…"
+msgstr "Filtern …"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "Folder name"
+msgstr "Ordnername"
+
+#: ../contents/ui/ConfigGeneral.qml
+msgid "Footer power buttons"
+msgstr "Energie-Schaltflächen in der Fußleiste"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "Frequently used"
+msgstr "Häufig verwendet"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "Friday"
+msgstr "Freitag"
+
+#: ../contents/config/config.qml
+msgid "General"
+msgstr "Allgemein"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "Good afternoon"
+msgstr "Guten Tag"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "Good evening"
+msgstr "Guten Abend"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "Good morning"
+msgstr "Guten Morgen"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "Good morning apps"
+msgstr "Apps für den Vormittag"
+
+#: ../contents/ui/ConfigGeneral.qml
+msgid "Grid"
+msgstr "Raster"
+
+#: ../contents/ui/ConfigGeneral.qml
+msgid "Home page:"
+msgstr "Startseite:"
+
+#: ../contents/ui/ConfigGeneral.qml
+msgid "Hong Kong"
+msgstr "Hongkong"
+
+#: ../contents/ui/ConfigGeneral.qml
+msgid "Huge"
+msgstr "Riesig"
+
+#: ../contents/ui/ConfigGeneral.qml
+msgid "Icon:"
+msgstr "Symbol:"
+
+#: ../contents/ui/ConfigGeneral.qml
+msgid "Istanbul"
+msgstr "Istanbul"
+
+#: ../contents/ui/ConfigGeneral.qml
+msgid "Johannesburg"
+msgstr "Johannesburg"
+
+#: ../contents/ui/ConfigGeneral.qml
+msgid "Large"
+msgstr "Groß"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "Late night"
+msgstr "Spät nachts"
+
+#: ../contents/ui/ConfigGeneral.qml
+msgid "List"
+msgstr "Liste"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "Lock Screen"
+msgstr "Bildschirm sperren"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "Lock the screen"
+msgstr "Den Bildschirm sperren"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "Log out"
+msgstr "Abmelden"
+
+#: ../contents/ui/Footer.qml
+msgid "Logout"
+msgstr "Abmelden"
+
+#: ../contents/ui/ConfigGeneral.qml
+msgid "London"
+msgstr "London"
+
+#: ../contents/ui/ConfigGeneral.qml
+msgid "Los Angeles"
+msgstr "Los Angeles"
+
+#: ../contents/ui/ConfigGeneral.qml
+msgid "Medium"
+msgstr "Mittel"
+
+#: ../contents/ui/ConfigGeneral.qml
+msgid "Menu position"
+msgstr "Menüposition"
+
+#: ../contents/ui/ConfigGeneral.qml
+msgid "Mexico City"
+msgstr "Mexiko-Stadt"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "Midday picks"
+msgstr "Mittagsauswahl"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "Monday"
+msgstr "Montag"
+
+#: ../contents/ui/ConfigGeneral.qml
+msgid "Moscow"
+msgstr "Moskau"
+
+#: ../contents/ui/ConfigGeneral.qml
+msgid "Mumbai"
+msgstr "Mumbai"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "New Folder"
+msgstr "Neuer Ordner"
+
+#: ../contents/ui/ConfigGeneral.qml
+msgid "New York"
+msgstr "New York"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "New folder"
+msgstr "Neuer Ordner"
+
+#: ../contents/ui/ConfigGeneral.qml
+msgid "Newest"
+msgstr "Neueste"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "No %1 results for \"%2\""
+msgstr "Keine Ergebnisse (%1) für „%2“"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "No results for \"%1\""
+msgstr "Keine Ergebnisse für „%1“"
 
 #: ../contents/ui/ConfigGeneral.qml
 msgid "Number of columns"
-msgstr "Spaltenanzahl"
+msgstr "Anzahl der Spalten"
 
 #: ../contents/ui/ConfigGeneral.qml
 msgid "Number of rows"
-msgstr "Zeilenanzahl"
+msgstr "Anzahl der Zeilen"
 
 #: ../contents/ui/ConfigGeneral.qml
-msgid "Unhide all hidden applications"
-msgstr "ausgeblendeten Anwendungen einblenden"
+msgid "Oldest"
+msgstr "Älteste"
 
-#: ../contents/ui/ConfigGeneral.qml
-msgid "Unhidden!"
-msgstr "unversteckt"
+#: ../contents/ui/code/tools.js
+msgid "On All Activities"
+msgstr "Auf allen Aktivitäten"
 
-#: ../contents/ui/main.qml
-msgid "Edit Applications..."
-msgstr "Anwendungen bearbeiten..."
+#: ../contents/ui/code/tools.js
+msgid "On the Current Activity"
+msgstr "Auf der aktuellen Aktivität"
 
 #: ../contents/ui/MenuRepresentation.qml
+msgid "Open Files"
+msgstr "Dateien öffnen"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "Open System Settings"
+msgstr "Systemeinstellungen öffnen"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "Open Terminal"
+msgstr "Terminal öffnen"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "Open a terminal"
+msgstr "Ein Terminal öffnen"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "Open file manager"
+msgstr "Dateiverwaltung öffnen"
+
+#: ../contents/ui/ConfigGeneral.qml
+msgid "Paris"
+msgstr "Paris"
+
+#: ../contents/ui/ItemGridDelegateColumns.qml
+msgid "Pin to Start"
+msgstr "An „Start“ anheften"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "Pinned"
+msgstr "Angeheftet"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "Press Enter to run: %1"
+msgstr "Enter drücken zum Ausführen: %1"
+
+#: ../contents/ui/ConfigGeneral.qml
+msgid "Recent Documents:"
+msgstr "Zuletzt verwendete Dokumente:"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "Recent documents"
+msgstr "Zuletzt verwendete Dokumente"
+
+#: ../contents/ui/code/tools.js
+msgid "Remove from Favorites"
+msgstr "Aus Favoriten entfernen"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "Rename"
+msgstr "Umbenennen"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "Rename Folder"
+msgstr "Ordner umbenennen"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "Rename folder"
+msgstr "Ordner umbenennen"
+
+#: ../contents/ui/ConfigGeneral.qml
+#: ../contents/ui/Footer.qml
+msgid "Restart"
+msgstr "Neu starten"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "Restart the computer"
+msgstr "Den Computer neu starten"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "Saturday"
+msgstr "Samstag"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "Save"
+msgstr "Speichern"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "Screenshot"
+msgstr "Bildschirmfoto"
+
+#: ../contents/ui/ConfigGeneral.qml
+msgid "Search"
+msgstr "Suchen"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: ../contents/ui/ConfigGeneral.qml
+msgid "Show Quick Actions bar (Screenshot, Lock, Terminal…)"
+msgstr "Schnellaktionsleiste anzeigen (Bildschirmfoto, Sperren, Terminal …)"
+
+#: ../contents/ui/ConfigGeneral.qml
+msgid "Show Recent Documents section"
+msgstr "Bereich „Zuletzt verwendete Dokumente“ anzeigen"
+
+#: ../contents/ui/code/tools.js
+msgid "Show in Favorites"
+msgstr "In Favoriten anzeigen"
+
+#: ../contents/ui/ConfigGeneral.qml
+msgid "Show labels in two lines"
+msgstr "Beschriftungen zweizeilig anzeigen"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "Show more"
+msgstr "Mehr anzeigen"
+
+#: ../contents/ui/ConfigGeneral.qml
+msgid "Show recently opened apps"
+msgstr "Zuletzt geöffnete Apps anzeigen"
+
+#: ../contents/ui/ConfigGeneral.qml
+msgid "Show weather widget (requires weather service)"
+msgstr "Wetter-Widget anzeigen (benötigt Wetterdienst)"
+
+#: ../contents/ui/ConfigGeneral.qml
+msgid "Show:"
+msgstr "Anzeigen:"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "Shut down the computer"
+msgstr "Den Computer herunterfahren"
+
+#: ../contents/ui/ConfigGeneral.qml
+#: ../contents/ui/Footer.qml
+msgid "Shutdown"
+msgstr "Herunterfahren"
+
+#: ../contents/ui/ConfigGeneral.qml
+msgid "Singapore"
+msgstr "Singapur"
+
+#: ../contents/ui/Footer.qml
+msgid "Sleep"
+msgstr "Standby"
+
+#: ../contents/ui/ConfigGeneral.qml
+msgid "Sleep / Suspend"
+msgstr "Standby / Ruhezustand"
+
+#: ../contents/ui/ConfigGeneral.qml
+msgid "Small"
+msgstr "Klein"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "Sunday"
+msgstr "Sonntag"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "Suspend to RAM"
+msgstr "Standby (Suspend to RAM)"
+
+#: ../contents/ui/ConfigGeneral.qml
+msgid "Sydney"
+msgstr "Sydney"
+
+#: ../contents/ui/Footer.qml
 msgid "System Preferences"
 msgstr "Systemeinstellungen"
 
 #: ../contents/ui/MenuRepresentation.qml
-msgid "User Home"
-msgstr "Persönlicher Ordner"
+msgid "System Settings"
+msgstr "Systemeinstellungen"
+
+#: ../contents/ui/ConfigGeneral.qml
+msgid "São Paulo"
+msgstr "São Paulo"
 
 #: ../contents/ui/MenuRepresentation.qml
-msgid "Lock Screen"
-msgstr "Sperrbildschirm"
+msgid "Take a screenshot"
+msgstr "Ein Bildschirmfoto aufnehmen"
 
 #: ../contents/ui/MenuRepresentation.qml
-msgid "Leave ..."
-msgstr "Verlassen ..."
+msgid "Thursday"
+msgstr "Donnerstag"
+
+#: ../contents/ui/ConfigGeneral.qml
+msgid "Tokyo"
+msgstr "Tokio"
+
+#: ../contents/ui/ConfigGeneral.qml
+msgid "Toronto"
+msgstr "Toronto"
 
 #: ../contents/ui/MenuRepresentation.qml
-msgid "Hi, "
-msgstr "Hallo,"
+msgid "Tuesday"
+msgstr "Dienstag"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "Type a command  ·  ↓ navigate  ·  /calc expr  ·  Enter run"
+msgstr "Befehl eingeben  ·  ↓ navigieren  ·  /calc Ausdruck  ·  Enter ausführen"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "Type a shell command after '>'"
+msgstr "Shell-Befehl nach „>“ eingeben"
 
 #: ../contents/ui/MenuRepresentation.qml
 msgid "Type here to search ..."
-msgstr "Hier tippen, um zu suchen ..."
+msgstr "Zum Suchen hier tippen …"
+
+#: ../contents/ui/ConfigGeneral.qml
+msgid "Unhidden!"
+msgstr "Wieder eingeblendet!"
+
+#: ../contents/ui/ConfigGeneral.qml
+msgid "Unhide all hidden applications"
+msgstr "Alle ausgeblendeten Anwendungen wieder einblenden"
 
 #: ../contents/ui/MenuRepresentation.qml
-msgid "Favorites"
-msgstr "Favoriten"
+msgid "Unpin all apps in folder"
+msgstr "Alle Apps im Ordner loslösen"
+
+#: ../contents/ui/ItemGridDelegateColumns.qml
+msgid "Unpin from Start"
+msgstr "Von „Start“ loslösen"
+
+#: ../contents/ui/Footer.qml
+msgid "User Home"
+msgstr "Persönlicher Ordner"
+
+#: ../contents/ui/ConfigGeneral.qml
+msgid "Version: 1.3"
+msgstr "Version: 1.3"
+
+#: ../contents/ui/ConfigGeneral.qml
+msgid "Weather location:"
+msgstr "Wetter-Standort:"
 
 #: ../contents/ui/MenuRepresentation.qml
-msgid "All apps"
-msgstr "Alle Programme"
+msgid "Wednesday"
+msgstr "Mittwoch"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "Your morning session"
+msgstr "Deine Morgenroutine"
+
+#: ../contents/ui/MenuRepresentation.qml
+msgid "Your top picks"
+msgstr "Deine Top-Auswahl"
+
+#: ../contents/ui/ConfigGeneral.qml
+msgid "Z → A"
+msgstr "Z → A"
+

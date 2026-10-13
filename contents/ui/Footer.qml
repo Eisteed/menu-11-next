@@ -38,6 +38,28 @@ RowLayout{
         id: sessionManager
     }
 
+    // The menu is a stay-on-top window; while it is open, Plasma refuses to
+    // show the logout/shutdown prompt. Close the menu first, then run the action.
+    function runSessionAction(action) {
+        root.visible = false;
+        sessionActionTimer.action = action;
+        sessionActionTimer.restart();
+    }
+
+    Timer {
+        id: sessionActionTimer
+        interval: 250
+        property string action: ""
+        onTriggered: {
+            switch (action) {
+            case "logout":   sessionManager.requestLogout();   break;
+            case "reboot":   sessionManager.requestReboot();   break;
+            case "shutdown": sessionManager.requestShutdown(); break;
+            case "suspend":  sessionManager.suspend();         break;
+            }
+        }
+    }
+
     Item {
         implicitWidth: userInfoRow.implicitWidth
         implicitHeight: userInfoRow.implicitHeight
@@ -125,25 +147,25 @@ RowLayout{
             MouseArea {
                 cursorShape: Qt.PointingHandCursor
                 anchors.fill: parent
-                onClicked: sessionManager.requestLogout()  
+                onClicked: runSessionAction("logout")
                 }
         icon.width: 24
         icon.height: 24
-        icon.name: "system-lock-screen"
-        
+        icon.name: "system-log-out"
+
         Layout.rightMargin: 10
         PlasmaComponents3.ToolTip.delay: 1000
         PlasmaComponents3.ToolTip.timeout: 1000
         PlasmaComponents3.ToolTip.visible: hovered
         PlasmaComponents3.ToolTip.text: i18n("Logout")
-        visible: sessionManager.canLock
+        visible: sessionManager.canLogout
     }
     
     PlasmaComponents3.ToolButton {
             MouseArea {
                 cursorShape: Qt.PointingHandCursor
                 anchors.fill: parent
-                onClicked: sessionManager.suspend()
+                onClicked: runSessionAction("suspend")
                 }
         icon.width: 24
         icon.height: 24
@@ -160,7 +182,7 @@ RowLayout{
             MouseArea {
                 cursorShape: Qt.PointingHandCursor
                 anchors.fill: parent
-                onClicked: sessionManager.requestReboot()
+                onClicked: runSessionAction("reboot")
                 }
         icon.width: 24
         icon.height: 24
@@ -176,7 +198,7 @@ RowLayout{
             MouseArea {
                 cursorShape: Qt.PointingHandCursor
                 anchors.fill: parent
-                onClicked: sessionManager.requestShutdown()
+                onClicked: runSessionAction("shutdown")
                 }
         icon.width: 24
         icon.height: 24

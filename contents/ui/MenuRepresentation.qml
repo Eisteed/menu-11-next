@@ -575,8 +575,17 @@ PlasmaCore.Dialog {
             { name: "settings",   icon: "preferences-system",  desc: i18n("Open System Settings"),   cmd: "systemsettings" },
             { name: "files",      icon: "system-file-manager", desc: i18n("Open file manager"),      cmd: "dolphin" },
             { name: "terminal",   icon: "utilities-terminal",  desc: i18n("Open a terminal"),        cmd: "konsole" },
-            { name: "logout",     icon: "system-log-out",      desc: i18n("Log out"),                cmd: "loginctl terminate-user " + Qt.application.name }
+            { name: "logout",     icon: "system-log-out",      desc: i18n("Log out"),                cmd: "", session: "logout" }
         ])
+
+        function runPaletteCommand(c) {
+            if (c.session) {
+                footerContent.runSessionAction(c.session);
+                return;
+            }
+            executable.exec(c.cmd);
+            root.toggle();
+        }
 
         Plasma5Support.DataSource {
             id: executable
@@ -759,9 +768,8 @@ PlasmaCore.Dialog {
                     var matched = rootItem.paletteCommands.filter(function(c) {
                         return query === "" || c.name.startsWith(query);
                     });
-                    if (matched.length > 0 && matched[0].cmd !== "") {
-                        executable.exec(matched[0].cmd);
-                        root.toggle();
+                    if (matched.length > 0 && (matched[0].cmd !== "" || matched[0].session)) {
+                        rootItem.runPaletteCommand(matched[0]);
                     }
                     return;
                 }
@@ -1917,8 +1925,7 @@ PlasmaCore.Dialog {
 
                         Keys.onReturnPressed: {
                             if (currentIndex >= 0 && currentIndex < model.length) {
-                                executable.exec(model[currentIndex].cmd);
-                                root.toggle();
+                                rootItem.runPaletteCommand(model[currentIndex]);
                             }
                         }
                         Keys.onEscapePressed: {
@@ -1992,8 +1999,7 @@ PlasmaCore.Dialog {
                                 hoverEnabled: true
                                 cursorShape: Qt.PointingHandCursor
                                 onClicked: {
-                                    executable.exec(modelData.cmd);
-                                    root.toggle();
+                                    rootItem.runPaletteCommand(modelData);
                                 }
                             }
                         }
