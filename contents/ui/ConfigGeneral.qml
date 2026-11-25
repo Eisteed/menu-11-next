@@ -47,12 +47,17 @@ KCM.SimpleKCM {
 
 
     property string cfg_icon: plasmoid.configuration.icon
+
+    // Keep the About text and the update check on the same version as metadata.json.
+    property string currentVersion: (plasmoid.metaData && plasmoid.metaData.version)
+                                    ? String(plasmoid.metaData.version) : "1.3"
     property bool cfg_useCustomButtonImage: plasmoid.configuration.useCustomButtonImage
     property string cfg_customButtonImage: plasmoid.configuration.customButtonImage
     property alias cfg_numberColumns: numberColumns.value
     property alias cfg_numberRows: numberRows.value
 
     property alias cfg_labels2lines: labels2lines.checked
+    property alias cfg_syncConfigAcrossPanels: syncConfigAcrossPanelsCb.checked
 
     property alias cfg_appsIconSize: appsIconSize.currentIndex
     property alias cfg_docsIconSize: docsIconSize.currentIndex
@@ -209,6 +214,14 @@ KCM.SimpleKCM {
             id: labels2lines
             text: i18n("Show labels in two lines")
             visible: true
+        }
+
+        CheckBox {
+            id: syncConfigAcrossPanelsCb
+            text: i18n("Sync settings across panels")
+            ToolTip.text: i18n("Share these settings with other Swin-11 widgets on your panels. Disable on one panel to keep it independent.")
+            ToolTip.visible: hovered
+            ToolTip.delay: 500
         }
 
         SpinBox{
@@ -401,7 +414,7 @@ KCM.SimpleKCM {
             Layout.fillWidth: true
 
             Text {
-                text: i18n("Version: 1.3")
+                text: i18n("Version: ") + configGeneral.currentVersion
                 Layout.fillWidth: true
             }
 
@@ -412,10 +425,10 @@ KCM.SimpleKCM {
 
                 onClicked: {
                     checkUpdatesBtn.checking = true;
-                    UpdateChecker.checkForUpdates("1.3", function(result) {
+                    UpdateChecker.checkForUpdates(configGeneral.currentVersion, function(result) {
                         checkUpdatesBtn.checking = false;
 
-                        var status = UpdateChecker.formatUpdateStatus(result, "1.3");
+                        var status = UpdateChecker.formatUpdateStatus(result, configGeneral.currentVersion);
                         showUpdateDialog(status.title, status.subtitle, result.releaseUrl);
                     });
                 }

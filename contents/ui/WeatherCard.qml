@@ -25,7 +25,7 @@ Rectangle {
     Timer {
         id: weatherUpdateTimer
         interval: 600000
-        running: true
+        running: weatherCard.visible
         repeat: true
         onTriggered: {
             weatherCard.fetchWeatherFromAPI();
@@ -71,8 +71,16 @@ Rectangle {
     }
 
 
+    // Called by the menu when it becomes visible; no-op while hidden so we
+    // never make network requests for a feature the user has disabled.
+    function refresh() {
+        if (weatherCard.visible)
+            fetchWeatherFromAPI();
+    }
+
     function fetchWeatherFromAPI() {
         var xhr = new XMLHttpRequest();
+        xhr.timeout = 10000;
         var lat = Plasmoid.configuration.weatherLatitude || 48.8566;
         var lon = Plasmoid.configuration.weatherLongitude || 2.3522;
         var apiUrl = "https://api.open-meteo.com/v1/forecast?latitude=" + lat + "&longitude=" + lon + "&current=temperature_2m,weather_code&timezone=auto";
@@ -83,6 +91,8 @@ Rectangle {
                     try {
                         var data = JSON.parse(xhr.responseText);
                         var current = data.current;
+                        if (!current || typeof current.temperature_2m !== "number" || typeof current.weather_code !== "number")
+                            throw new Error("unexpected payload");
 
                         weatherCard.temperature = Math.round(current.temperature_2m) + "°C";
                         weatherCard.condition = weatherCard.getWeatherDescription(current.weather_code);
@@ -108,12 +118,18 @@ Rectangle {
             weatherCard.condition = "Network error";
         };
 
+        xhr.ontimeout = function() {
+            console.error("[Weather] Request timed out");
+            weatherCard.temperature = "Error";
+            weatherCard.condition = "Timeout";
+        };
+
         xhr.open("GET", apiUrl, true);
         xhr.send();
     }
 
     Component.onCompleted: {
-        fetchWeatherFromAPI();
+        refresh();
     }
 
 }

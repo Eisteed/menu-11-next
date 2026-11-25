@@ -7,6 +7,11 @@
 
   <group name="General">
 
+    <entry name="syncConfigAcrossPanels" type="Bool">
+      <label>Share settings between widgets on different panels</label>
+      <default>true</default>
+    </entry>
+
     <entry name="appsIconSize" type="Enum">
       <label></label>
       <default>1</default>
@@ -109,7 +114,8 @@
     </entry>
 
     <entry name="enableShellRunner" type="Bool">
-      <default>true</default>
+      <!-- Off by default: "> command" runs arbitrary shell commands. -->
+      <default>false</default>
     </entry>
 
     <entry name="showSleepButton" type="Bool">

@@ -45,6 +45,12 @@ PlasmoidItem {
     property Item dragSource: null
     property string searchRunnerFilter: "all"
 
+    // Keep settings identical when this widget is on multiple panels.
+    SharedConfig {
+        id: sharedConfig
+        syncEnabled: Plasmoid.configuration.syncConfigAcrossPanels !== false
+    }
+
     function action_menuedit() {
         processRunner.runMenuEditor();
     }
@@ -94,6 +100,7 @@ PlasmoidItem {
         }
 
         Component.onCompleted: {
+            // Keep the per-instance client id; favoriteApps is mirrored by SharedConfig.
             favoritesModel.initForClient("org.kde.plasma.kicker.favorites.instance-" + Plasmoid.id)
 
             if (!Plasmoid.configuration.favoritesPortedToKAstats) {
@@ -140,11 +147,13 @@ PlasmoidItem {
         target: Plasmoid.configuration
 
         function onFavoriteAppsChanged () {
-            globalFavorites.favorites = Plasmoid.configuration.favoriteApps;
+            if (globalFavorites)
+                globalFavorites.favorites = Plasmoid.configuration.favoriteApps;
         }
 
         function onFavoriteSystemActionsChanged () {
-            systemFavorites.favorites = Plasmoid.configuration.favoriteSystemActions;
+            if (systemFavorites)
+                systemFavorites.favorites = Plasmoid.configuration.favoriteSystemActions;
         }
 
         function onHiddenApplicationsChanged(){
