@@ -150,6 +150,10 @@ PlasmaCore.Dialog {
                 });
             }
         } else {
+            // Reset transient search state so the next open starts on the
+            // normal page at the configured size, not a stale search view.
+            searchField.clear();
+            kicker.searchRunnerFilter = "all";
             view.currentIndex = 0;
         }
     }
@@ -1512,6 +1516,14 @@ PlasmaCore.Dialog {
                 id: searchPage
                 width: rootItem.widthComputed
                 height: view.height
+
+                // Opaque surface for the whole page: without it the search
+                // view lets the desktop/previous page show through and looks
+                // as if the menu shrank (upstream issue #24 / #23).
+                Rectangle {
+                    anchors.fill: parent
+                    color: Kirigami.Theme.backgroundColor
+                }
 
                 function tryActivate(row, col) { runnerGrid.tryActivate(row, col); }
 
