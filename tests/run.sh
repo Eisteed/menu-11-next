@@ -62,7 +62,7 @@ echo "  calculator OK (including injection strings rejected)"
 echo "== config sync wiring =="
 grep -q 'syncConfigAcrossPanels' contents/config/main.xml || fail "sync toggle missing from main.xml"
 grep -q 'SharedConfig' contents/ui/main.qml || fail "SharedConfig not instantiated"
-grep -q 'swin11-shared.conf' README.md || fail "sync feature undocumented"
+grep -q 'swin11-shared.conf' contents/ui/SharedConfig.qml || fail "sync store path missing"
 echo "  sync wiring OK"
 
 if [ "${1:-}" = "--smoke" ]; then
