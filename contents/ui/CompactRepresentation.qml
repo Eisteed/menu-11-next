@@ -57,14 +57,16 @@ Item {
         hoverEnabled: true
 
         onClicked: {
-            dashWindow.visible = !dashWindow.visible;
+            if (dashWindow)
+                dashWindow.visible = !dashWindow.visible;
         }
     }
 
     Component.onCompleted: {
         dashWindow = Qt.createQmlObject("MenuRepresentation {}", root);
         plasmoid.activated.connect(function() {
-            dashWindow.visible = !dashWindow.visible;
+            if (dashWindow)
+                dashWindow.visible = !dashWindow.visible;
         });
     }
 }

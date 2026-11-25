@@ -1,6 +1,6 @@
 .pragma library
 
-var updateCheckUrl = "https://api.github.com/repos/Eisteed/menu-11-next/releases/latest";
+var updateCheckUrl = "https://api.github.com/repos/ThatByteGuy/Swin-11/releases/latest";
 
 function parseVersion(versionString) {
     // Remove 'v' prefix if present (v1.3.0 -> 1.3.0)
@@ -50,6 +50,14 @@ function fetchLatestRelease(callback) {
                         error: "Failed to parse response: " + e.message
                     });
                 }
+            } else if (xhr.status === 404) {
+                // A fork with no published releases is not an error.
+                callback({
+                    success: true,
+                    noReleases: true,
+                    updateAvailable: false,
+                    error: null
+                });
             } else {
                 callback({
                     success: false,
@@ -93,6 +101,16 @@ function checkForUpdates(currentVersion, callback) {
             });
             return;
         }
+        if (release.noReleases) {
+            callback({
+                success: true,
+                noReleases: true,
+                updateAvailable: false,
+                currentVersion: currentVersion,
+                error: null
+            });
+            return;
+        }
 
         var comparison = compareVersions(currentVersion, release.version);
         var result = {
@@ -129,6 +147,13 @@ function formatUpdateStatus(checkResult, currentVersion) {
         return {
             title: "Update Check Failed",
             subtitle: checkResult.error
+        };
+    }
+
+    if (checkResult.noReleases) {
+        return {
+            title: "No releases published",
+            subtitle: "This fork has no GitHub releases to compare against"
         };
     }
 

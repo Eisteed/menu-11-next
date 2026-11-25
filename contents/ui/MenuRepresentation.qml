@@ -34,6 +34,9 @@ import org.kde.kitemmodels 1.0 as KItemModels
 import org.kde.coreaddons 1.0 as KCoreAddons
 import "." as CustomUI
 import "code/UpdateChecker.js" as UpdateChecker
+import "code/Calculator.js" as Calculator
+import "code/AppFolders.js" as AppFolders
+import "code/Workflow.js" as Workflow
 
 PlasmaCore.Dialog {
     id: root
@@ -89,6 +92,28 @@ PlasmaCore.Dialog {
 
     property bool searching: (searchField.text != "")
 
+    // Imported JS libraries can see QML ids/properties but not import aliases
+    // such as Plasmoid, so expose configuration explicitly.
+    property var cfg: Plasmoid.configuration
+
+    // Single source of truth: the version declared in metadata.json.
+    property string currentVersion: (Plasmoid.metaData && Plasmoid.metaData.version)
+                                    ? String(Plasmoid.metaData.version) : "1.3"
+
+    // Clipboard helper: avoids spawning a shell just to copy text.
+    TextInput {
+        id: clipboardHelper
+        visible: false
+        maximumLength: 512
+    }
+
+    function copyToClipboard(text) {
+        clipboardHelper.text = text
+        clipboardHelper.selectAll()
+        clipboardHelper.copy()
+        clipboardHelper.text = ""
+    }
+
     onSearchingChanged: {
         if (searching) {
             view.currentIndex = 2;
@@ -110,11 +135,11 @@ PlasmaCore.Dialog {
                 ensureCategoryModel();
             }
             if (weatherCard) {
-                weatherCard.updateWeather();
+                weatherCard.refresh();
             }
             // Trigger periodic background update check (throttled to once per 24 hours)
             if (UpdateChecker.shouldCheckForUpdates(Plasmoid.configuration)) {
-                UpdateChecker.checkForUpdates("1.3", function(result) {
+                UpdateChecker.checkForUpdates(currentVersion, function(result) {
                     if (result.success) {
                         UpdateChecker.recordLastCheckTime(Plasmoid.configuration);
                         if (result.updateAvailable) {
@@ -265,54 +290,48 @@ PlasmaCore.Dialog {
         property var pinnedFoldersData: []
 
         function loadFolders() {
-            var raw = Plasmoid.configuration.pinnedFolders;
-            if (!raw || raw.length === 0) { pinnedFoldersData = []; return; }
-            try { pinnedFoldersData = JSON.parse(raw); } catch(e) { pinnedFoldersData = []; }
+
+            AppFolders.loadFolders();
+
         }
 
         function saveFolders() {
-            Plasmoid.configuration.pinnedFolders = JSON.stringify(pinnedFoldersData);
+
+            AppFolders.saveFolders();
+
         }
 
         // ── All Apps Folders ────────────────────────────────────────────────
         property var allAppsFoldersData: []
 
         function loadAllAppsFolders() {
-            var raw = Plasmoid.configuration.allAppsFolders;
-            if (!raw || raw.length === 0) { allAppsFoldersData = []; return; }
-            try { allAppsFoldersData = JSON.parse(raw); } catch(e) { allAppsFoldersData = []; }
+
+            AppFolders.loadAllAppsFolders();
+
         }
 
         function saveAllAppsFolders() {
-            Plasmoid.configuration.allAppsFolders = JSON.stringify(allAppsFoldersData);
+
+            AppFolders.saveAllAppsFolders();
+
         }
 
         function launchFolderApp(desktopId) {
-            var favList = globalFavorites.favorites;
-            for (var i = 0; i < favList.length; i++) {
-                if (favList[i] === desktopId) {
-                    rootItem.recordLaunch(desktopId);
-                    globalFavorites.trigger(i, "", null);
-                    root.toggle();
-                    return;
-                }
-            }
+
+            AppFolders.launchFolderApp(desktopId);
+
         }
 
         function displayNameForId(id) {
-            if (id.startsWith("preferred://")) {
-                var s = id.slice(12);
-                return s.charAt(0).toUpperCase() + s.slice(1);
-            }
-            var base = id.replace(/\.desktop$/, "");
-            var name = base.split(".").pop();
-            return name.split("-").map(function(w) {
-                return w.length > 0 ? w.charAt(0).toUpperCase() + w.slice(1) : "";
-            }).join(" ");
+
+            return AppFolders.displayNameForId(id);
+
         }
 
         function iconForId(id) {
-            return id.startsWith("preferred://") ? "emblem-default" : id.replace(/\.desktop$/, "");
+
+            return AppFolders.iconForId(id);
+
         }
 
         property bool _needsComboRebuild: false
@@ -340,230 +359,57 @@ PlasmaCore.Dialog {
         readonly property int kickerUrlRole:         Qt.UserRole + 10        // 266
 
         function lookupAppInfo(favId) {
-            for (var i = 0; i < sortedAppsModel.rowCount(); i++) {
-                var midx = sortedAppsModel.index(i, 0);
-                if (sortedAppsModel.data(midx, kickerFavoriteIdRole) === favId) {
-                    return {
-                        name:        sortedAppsModel.data(midx, kickerDisplayRole)    || displayNameForId(favId),
-                        decoration:  sortedAppsModel.data(midx, kickerDecorationRole) || iconForId(favId),
-                        description: sortedAppsModel.data(midx, kickerDescriptionRole) || ""
-                    };
-                }
-            }
-            return { name: displayNameForId(favId), decoration: iconForId(favId), description: "" };
+
+            return AppFolders.lookupAppInfo(favId);
+
         }
 
         function buildAllAppsCombo() {
-            allAppsComboModel.clear();
-            if (!sortedAppsModel.sourceModel) return;
 
-            var displayRole    = kickerDisplayRole;
-            var decorationRole = kickerDecorationRole;
-            var favoriteIdRole = kickerFavoriteIdRole;
-            var descRole       = kickerDescriptionRole;
-            var urlRole        = kickerUrlRole;
-            var sortMode       = Plasmoid.configuration.allAppsSortMode;
+            AppFolders.buildAllAppsCombo();
 
-            // Build set of foldered app IDs
-            var folderedIds = {};
-            for (var fi = 0; fi < allAppsFoldersData.length; fi++) {
-                var fd0 = allAppsFoldersData[fi];
-                if (fd0.items) {
-                    for (var ai0 = 0; ai0 < fd0.items.length; ai0++) folderedIds[fd0.items[ai0]] = fi;
-                }
-            }
-
-            // Non-foldered app entries (already sorted by sortedAppsModel)
-            var appRows = [];
-            for (var i = 0; i < sortedAppsModel.rowCount(); i++) {
-                var midx = sortedAppsModel.index(i, 0);
-                var favId = favoriteIdRole !== undefined ? (sortedAppsModel.data(midx, favoriteIdRole) || "") : "";
-                if (favId !== "" && folderedIds[favId] !== undefined) continue;
-                appRows.push({
-                    itemType:    "app",
-                    display:     sortedAppsModel.data(midx, displayRole)    || "",
-                    decoration:  sortedAppsModel.data(midx, decorationRole) || "",
-                    favoriteId:  favId,
-                    description: descRole !== undefined ? (sortedAppsModel.data(midx, descRole) || "") : "",
-                    url:         urlRole  !== undefined ? (sortedAppsModel.data(midx, urlRole)  || "") : "",
-                    disabled: false, hasActionList: false,
-                    sourceRow: i, folderIdx: -1, indented: false, expanded: false
-                });
-            }
-
-            // Folder entries
-            var folderRows = [];
-            for (var fi2 = 0; fi2 < allAppsFoldersData.length; fi2++) {
-                var fd2 = allAppsFoldersData[fi2];
-                folderRows.push({
-                    itemType:    "folder",
-                    display:     fd2.name,
-                    decoration:  "folder",
-                    favoriteId:  "",
-                    description: i18np("%1 app", "%1 apps", fd2.items ? fd2.items.length : 0),
-                    url: "",
-                    disabled: false, hasActionList: true,
-                    sourceRow: -1, folderIdx: fi2, indented: false, expanded: false
-                });
-            }
-
-            // Sort folder entries per mode
-            if (sortMode === 0 || sortMode === 4)
-                folderRows.sort(function(a, b) { return a.display.localeCompare(b.display); });
-            else if (sortMode === 1)
-                folderRows.sort(function(a, b) { return b.display.localeCompare(a.display); });
-            else if (sortMode === 2)
-                folderRows.sort(function(a, b) { return (allAppsFoldersData[b.folderIdx].createdAt||0) - (allAppsFoldersData[a.folderIdx].createdAt||0); });
-            else if (sortMode === 3)
-                folderRows.sort(function(a, b) { return (allAppsFoldersData[a.folderIdx].createdAt||0) - (allAppsFoldersData[b.folderIdx].createdAt||0); });
-
-            // Combine based on sort mode
-            var combined = [];
-            if (sortMode === 4) {
-                combined = folderRows.concat(appRows);
-            } else if (sortMode === 0) {
-                var ai = 0, fri = 0;
-                while (ai < appRows.length && fri < folderRows.length) {
-                    if (appRows[ai].display.localeCompare(folderRows[fri].display) <= 0) combined.push(appRows[ai++]);
-                    else combined.push(folderRows[fri++]);
-                }
-                while (ai < appRows.length)   combined.push(appRows[ai++]);
-                while (fri < folderRows.length) combined.push(folderRows[fri++]);
-            } else if (sortMode === 1) {
-                var ai2 = 0, fri2 = 0;
-                while (ai2 < appRows.length && fri2 < folderRows.length) {
-                    if (appRows[ai2].display.localeCompare(folderRows[fri2].display) >= 0) combined.push(appRows[ai2++]);
-                    else combined.push(folderRows[fri2++]);
-                }
-                while (ai2 < appRows.length)   combined.push(appRows[ai2++]);
-                while (fri2 < folderRows.length) combined.push(folderRows[fri2++]);
-            } else {
-                // Modes 2/3: newest folders first, oldest folders last
-                combined = (sortMode === 2) ? folderRows.concat(appRows) : appRows.concat(folderRows);
-            }
-
-            for (var ci = 0; ci < combined.length; ci++) allAppsComboModel.append(combined[ci]);
         }
 
         function toggleFolderExpand(folderComboIdx) {
-            if (folderComboIdx < 0 || folderComboIdx >= allAppsComboModel.count) return;
-            var entry = allAppsComboModel.get(folderComboIdx);
-            if (entry.itemType !== "folder") return;
-            var fi = entry.folderIdx;
-            if (fi < 0 || fi >= allAppsFoldersData.length) return;
-            var folder = allAppsFoldersData[fi];
 
-            if (!entry.expanded) {
-                allAppsComboModel.set(folderComboIdx, { expanded: true });
-                var items = folder.items || [];
-                for (var i = 0; i < items.length; i++) {
-                    var info = lookupAppInfo(items[i]);
-                    allAppsComboModel.insert(folderComboIdx + 1 + i, {
-                        itemType:    "app",
-                        display:     info.name,
-                        decoration:  info.decoration,
-                        favoriteId:  items[i],
-                        description: info.description,
-                        url: "",
-                        disabled: false, hasActionList: false,
-                        sourceRow: -1, folderIdx: fi, indented: true, expanded: false
-                    });
-                }
-            } else {
-                allAppsComboModel.set(folderComboIdx, { expanded: false });
-                while (folderComboIdx + 1 < allAppsComboModel.count) {
-                    var next = allAppsComboModel.get(folderComboIdx + 1);
-                    if (next.indented && next.folderIdx === fi) allAppsComboModel.remove(folderComboIdx + 1);
-                    else break;
-                }
-            }
+            AppFolders.toggleFolderExpand(folderComboIdx);
+
         }
 
         // ── Launch Frequency Tracking ───────────────────────────────────────
         property var launchCounts: ({})
 
         function loadLaunchCounts() {
-            var raw = Plasmoid.configuration.appLaunchCounts;
-            if (!raw || raw.length === 0) { launchCounts = ({}); return; }
-            try { launchCounts = JSON.parse(raw); } catch(e) { launchCounts = ({}); }
+
+            Workflow.loadLaunchCounts();
+
         }
 
         function saveLaunchCounts() {
-            Plasmoid.configuration.appLaunchCounts = JSON.stringify(launchCounts);
+
+            Workflow.saveLaunchCounts();
+
         }
 
         // Returns the current workflow bucket key: "day-slot"
         // day: 0=Sun…6=Sat, slot: 0=night(0-5h), 1=morning(6-11h), 2=afternoon(12-17h), 3=evening(18-23h)
         function currentBucket() {
-            var now = new Date();
-            var day = now.getDay();
-            var h = now.getHours();
-            var slot = h < 6 ? 0 : h < 12 ? 1 : h < 18 ? 2 : 3;
-            return day + "-" + slot;
+            return Workflow.currentBucket();
         }
 
         // Returns a 0-10 score for how strongly an app matches the current time/day slot
         function workflowScore(appId) {
-            if (!appId) return 0;
-            var entry = launchCounts[appId];
-            if (!entry || typeof entry !== "object") return 0;
-            var bucket = currentBucket();
-            var bucketCount = (entry.buckets && entry.buckets[bucket]) || 0;
-            var total = entry.total || 1;
-            return Math.round((bucketCount / total) * 10);
+            return Workflow.workflowScore(appId);
         }
 
         function recordLaunch(appId) {
-            if (!appId || appId === "") return;
-            var updated = JSON.parse(JSON.stringify(launchCounts));
-            var bucket = currentBucket();
-            var prev = updated[appId];
-            // Migrate legacy plain-number entries to the new schema
-            var prevTotal = (typeof prev === "number") ? prev : (prev && prev.total ? prev.total : 0);
-            var prevBuckets = (prev && typeof prev === "object" && prev.buckets) ? prev.buckets : {};
-            prevBuckets[bucket] = (prevBuckets[bucket] || 0) + 1;
-            updated[appId] = { total: prevTotal + 1, buckets: prevBuckets };
-            launchCounts = updated;
-            saveLaunchCounts();
+
+            Workflow.recordLaunch(appId);
+
         }
 
         // ── Smart Context ────────────────────────────────────────────────────
-        property string contextLabel: {
-            var counts = rootItem.launchCounts;
-            // Check for workflow pattern: any app with bucket score >= 6
-            var hasWorkflow = false;
-            for (var id in counts) {
-                if (rootItem.workflowScore(id) >= 6) { hasWorkflow = true; break; }
-            }
-            if (hasWorkflow) {
-                var now = new Date();
-                var days = [i18n("Sunday"), i18n("Monday"), i18n("Tuesday"),
-                            i18n("Wednesday"), i18n("Thursday"), i18n("Friday"), i18n("Saturday")];
-                var h = now.getHours();
-                var dayName = days[now.getDay()];
-                if (h < 6)  return i18n("%1 night session", dayName);
-                if (h < 12) return i18n("%1 morning picks", dayName);
-                if (h < 18) return i18n("%1 afternoon picks", dayName);
-                return i18n("%1 evening picks", dayName);
-            }
-            // Frequency-based fallback
-            var topCount = 0;
-            for (var aid in counts) {
-                var entry = counts[aid];
-                var t = (entry && typeof entry === "object") ? (entry.total || 0) : (entry || 0);
-                if (t > topCount) topCount = t;
-            }
-            if (topCount >= 10) return i18n("Your top picks");
-            if (topCount >= 5)  return i18n("Frequently used");
-            // Time-of-day fallback
-            var hour = new Date().getHours();
-            if (hour >= 5  && hour < 9)  return i18n("Your morning session");
-            if (hour >= 9  && hour < 12) return i18n("Good morning apps");
-            if (hour >= 12 && hour < 14) return i18n("Midday picks");
-            if (hour >= 14 && hour < 18) return i18n("Afternoon session");
-            if (hour >= 18 && hour < 21) return i18n("Evening apps");
-            return i18n("Late night");
-        }
+        property string contextLabel: Workflow.computeContextLabel()
 
         // ── Command Palette ──────────────────────────────────────────────────
         readonly property var paletteCommands: ([
@@ -575,7 +421,7 @@ PlasmaCore.Dialog {
             { name: "settings",   icon: "preferences-system",  desc: i18n("Open System Settings"),   cmd: "systemsettings" },
             { name: "files",      icon: "system-file-manager", desc: i18n("Open file manager"),      cmd: "dolphin" },
             { name: "terminal",   icon: "utilities-terminal",  desc: i18n("Open a terminal"),        cmd: "konsole" },
-            { name: "logout",     icon: "system-log-out",      desc: i18n("Log out"),                cmd: "loginctl terminate-user " + Qt.application.name }
+            { name: "logout",     icon: "system-log-out",      desc: i18n("Log out"),                cmd: "loginctl terminate-user \"$(id -un)\"" }
         ])
 
         Plasma5Support.DataSource {
@@ -750,7 +596,7 @@ PlasmaCore.Dialog {
                 if (root.searching && searchField.text.startsWith('/')) {
                     // Calculator result: copy to clipboard
                     if (commandPaletteContainer.calcResult !== "") {
-                        executable.exec("printf '%s' '" + commandPaletteContainer.calcResult + "' | xclip -selection clipboard 2>/dev/null || printf '%s' '" + commandPaletteContainer.calcResult + "' | xsel --clipboard --input 2>/dev/null");
+                        root.copyToClipboard(commandPaletteContainer.calcResult);
                         root.toggle();
                         return;
                     }
@@ -1790,14 +1636,14 @@ PlasmaCore.Dialog {
                         return "";
                     }
 
+                    // Bounded arithmetic only. Never eval user input: the result
+                    // is a plain number and cannot contain shell metacharacters.
                     property string calcResult: {
                         var expr = calcQuery;
                         if (!expr) return "";
-                        try {
-                            var r = Function("return (" + expr + ")")();
-                            if (r === undefined || (typeof r === "number" && isNaN(r))) return "";
-                            return String(r);
-                        } catch(e) { return ""; }
+                        var r = Calculator.evaluate(expr);
+                        if (!isFinite(r)) return "";
+                        return String(Math.round(r * 1e10) / 1e10);
                     }
 
                     // Inline AI: /ai <prompt>
@@ -1885,7 +1731,7 @@ PlasmaCore.Dialog {
                             anchors.fill: parent
                             cursorShape: Qt.PointingHandCursor
                             onClicked: {
-                                executable.exec("printf '%s' '" + commandPaletteContainer.calcResult + "' | xclip -selection clipboard 2>/dev/null || printf '%s' '" + commandPaletteContainer.calcResult + "' | xsel --clipboard --input 2>/dev/null");
+                                root.copyToClipboard(commandPaletteContainer.calcResult);
                             }
                         }
                     }
