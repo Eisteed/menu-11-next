@@ -23,7 +23,10 @@ import org.kde.plasma.configuration 2.0
 
 ConfigModel {
     ConfigCategory {
+         // i18n() is a Plasma QML global; Qt6 qmllint does not know it.
+         // qmllint disable unqualified
          name: i18n("General")
+         // qmllint enable unqualified
          icon: "kde"
          source: "ConfigGeneral.qml"
     }
